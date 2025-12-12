@@ -25,6 +25,7 @@ const exportPdfBtn =
   document.getElementById('btnExportPdf') ||
   document.querySelector('[data-export-pdf]') ||
   document.querySelector('.export-pdf-btn');
+const downloadRoutineBtn = document.getElementById('downloadRoutineBtn');
 
 const regenerateRoutineBtn = document.getElementById('regenerateRoutineBtn');
 const eliminarRutinaBtn = document.getElementById('eliminarRutinaBtn');
@@ -715,6 +716,41 @@ function exportarPdfPro() {
   }, 300);
 }
 
+function descargarRutinaJSON() {
+  const saved = cargarRutinaLocal();
+  if (!saved?.rutina || !saved?.formData) {
+    alert('No hay rutina guardada para descargar.');
+    return;
+  }
+
+  const payload = {
+    rutina: saved.rutina,
+    formData: saved.formData,
+    exportadoEn: new Date().toISOString()
+  };
+
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {
+    type: 'application/json'
+  });
+  const url = URL.createObjectURL(blob);
+
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `rutina-smart-trainer-${Date.now()}.json`;
+  a.click();
+
+  URL.revokeObjectURL(url);
+}
+
+function actualizarEstadoDescarga(hayRutina) {
+  if (!downloadRoutineBtn) return;
+
+  downloadRoutineBtn.disabled = !hayRutina;
+  downloadRoutineBtn.title = hayRutina
+    ? 'Descargar la última rutina generada'
+    : 'Genera o carga una rutina para habilitar la descarga';
+}
+
 /***************************************************
  * EVENTOS
  ***************************************************/
@@ -753,6 +789,7 @@ routineForm?.addEventListener('submit', async (e) => {
 
     routineContent.innerHTML = buildRoutineHTML(routineObj, formData);
     guardarRutinaLocal(routineObj, formData);
+    actualizarEstadoDescarga(true);
 
     // Reinicia progreso al generar una rutina nueva
     localStorage.removeItem('smartTrainer_rutinaProgreso');
@@ -794,6 +831,8 @@ eliminarRutinaBtn?.addEventListener('click', () => {
   currentRoutineJSON = null;
   if (routineContent) routineContent.innerHTML = '';
 
+  actualizarEstadoDescarga(false);
+
   if (currentRoutineSection) currentRoutineSection.style.display = 'none';
   if (routineGeneratorSection) routineGeneratorSection.style.display = 'block';
   window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -805,12 +844,20 @@ exportPdfBtn?.addEventListener('click', (e) => {
   exportarPdfPro();
 });
 
+downloadRoutineBtn?.addEventListener('click', (e) => {
+  e.preventDefault();
+  descargarRutinaJSON();
+});
+
 /***************************************************
  * INIT
  ***************************************************/
 (function init() {
   const saved = cargarRutinaLocal();
-  if (!saved?.rutina || !saved?.formData) return;
+  if (!saved?.rutina || !saved?.formData) {
+    actualizarEstadoDescarga(false);
+    return;
+  }
 
   currentRoutineJSON = saved.rutina;
   routineContent.innerHTML = buildRoutineHTML(saved.rutina, saved.formData);
@@ -824,4 +871,5 @@ exportPdfBtn?.addEventListener('click', (e) => {
   }
 
   actualizarEstadoRutina();
+  actualizarEstadoDescarga(true);
 })();
