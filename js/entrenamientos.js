@@ -1,7 +1,8 @@
 /***************************************************
  * CONFIG
  ***************************************************/
-const BACKEND_URL = 'http://192.168.1.81:3000/api/generar-rutina';
+// Usa la misma URL/base del sitio para evitar fallas de red al cambiar de host
+const BACKEND_URL = '/api/generar-rutina';
 
 
 /***************************************************
