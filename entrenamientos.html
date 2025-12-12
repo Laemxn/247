@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Entrenamientos IA - Smart Trainer</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/entrenamientos.css">
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <div class="logo">
+        <div class="logo-icon">ST</div>
+        <div class="logo-text">Smart<span>Trainer</span></div>
+      </div>
+
+      <div class="hamburger-menu">
+        <span></span><span></span><span></span>
+      </div>
+
+      <nav class="nav-menu">
+        <ul>
+          <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+          <li><a href="entrenamientos.html"><i class="fas fa-dumbbell"></i> Entrenamientos</a></li>
+          <li><a href="nutricion.html"><i class="fas fa-apple-alt"></i> Nutrición</a></li>
+          <li><a href="progreso.html"><i class="fas fa-chart-line"></i> Progreso</a></li>
+          <li><a href="comunidad.html"><i class="fas fa-users"></i> Comunidad</a></li>
+          <li><a href="catalogo-ejercicios.html"><i class="fas fa-dumbbell"></i> Ejercicios</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <h1>Entrenamiento <span>Inteligente</span></h1>
+    <p>Rutinas 100% personalizadas por IA que evolucionan contigo</p>
+  </section>
+
+  <!-- Rutina actual -->
+  <section class="current-routine" id="currentRoutineSection" style="display:none;">
+    <div class="container">
+
+      <div class="routine-header">
+        <h2>🎯 Tu Rutina Activa</h2>
+        <div class="routine-actions">
+          <button class="btn-secondary" id="exportPdfBtn">
+            <i class="fas fa-file-pdf"></i> Exportar PDF
+          </button>
+
+          <button class="btn-secondary" id="regenerateRoutineBtn">
+            <i class="fas fa-sync"></i> Regenerar
+          </button>
+
+          <button
+            class="btn-secondary"
+            id="eliminarRutinaBtn"
+            style="background-color: var(--rojo); border-color: var(--rojo);">
+            <i class="fas fa-trash"></i> Eliminar Rutina
+          </button>
+        </div>
+      </div>
+
+      <div class="routine-progress">
+        <div class="progress-stats">
+          <div class="stat">
+            <div class="stat-value" id="completedSessions">0/0</div>
+            <div class="stat-label">Sesiones Completadas</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-value" id="routineProgress">0%</div>
+            <div class="stat-label">Progreso Total</div>
+          </div>
+
+          <div class="stat">
+            <div class="stat-value" id="nextSession">Día 1</div>
+            <div class="stat-label">Próximo Entrenamiento</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="complete-day-section" style="text-align:center; margin:2rem 0;">
+        <button class="btn-primary" id="completeDayBtn" style="width:auto; padding:1rem 2rem;">
+          <i class="fas fa-flag-checkered"></i> Completar Día Actual
+        </button>
+        <p style="margin-top:0.5rem; opacity:0.7; font-size:0.9rem;">
+          Marca este día como completado y desbloquea el siguiente
+        </p>
+      </div>
+
+      <div class="routine-content" id="routineContent"></div>
+
+    </div>
+  </section>
+
+  <!-- Generador -->
+  <section class="routine-generator" id="routineGeneratorSection">
+    <div class="container">
+      <h2 class="section-title">Genera Tu Rutina Personalizada</h2>
+
+      <div class="generator-card">
+        <form id="routineForm">
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="trainingGoal">🎯 Objetivo Principal</label>
+              <select id="trainingGoal" class="select-control" required>
+                <option value="">Selecciona tu objetivo</option>
+                <option value="ganar_masa_muscular">Ganar Masa Muscular</option>
+                <option value="perder_grasa">Perder Grasa Corporal</option>
+                <option value="definicion_muscular">Definición Muscular</option>
+                <option value="aumentar_fuerza">Aumentar Fuerza</option>
+                <option value="mejorar_resistencia">Mejorar Resistencia</option>
+                <option value="salud_general">Salud General</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="trainingLevel">📊 Nivel de Entrenamiento</label>
+              <select id="trainingLevel" class="select-control" required>
+                <option value="">Selecciona tu nivel</option>
+                <option value="principiante">Principiante</option>
+                <option value="intermedio">Intermedio</option>
+                <option value="avanzado">Avanzado</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="trainingDays">📅 Días por Semana</label>
+              <select id="trainingDays" class="select-control" required>
+                <option value="">Selecciona días</option>
+                <option value="3">3 días</option>
+                <option value="4">4 días</option>
+                <option value="5">5 días</option>
+                <option value="6">6 días</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="sessionDuration">⏱️ Duración por Sesión</label>
+              <select id="sessionDuration" class="select-control" required>
+                <option value="">Selecciona duración</option>
+                <option value="45">45 minutos</option>
+                <option value="60">60 minutos</option>
+                <option value="75">75 minutos</option>
+                <option value="90">90 minutos</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="availableEquipment">🏋️ Equipamiento Disponible</label>
+              <select id="availableEquipment" class="select-control" required>
+                <option value="">Selecciona equipamiento</option>
+                <option value="gimnasio_completo">Gimnasio Completo</option>
+                <option value="equipamiento_basico">Equipamiento Básico</option>
+                <option value="peso_corporal">Solo Peso Corporal</option>
+                <option value="mancuernas">Mancuernas</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="trainingFocus">🎯 Tipo de Rutina</label>
+              <select id="trainingFocus" class="select-control" required>
+                <option value="">Selecciona tipo</option>
+                <option value="fullbody">Full Body</option>
+                <option value="upper_lower">Upper/Lower</option>
+                <option value="push_pull_legs">Push/Pull/Legs</option>
+                <option value="bro_split">Split por Grupo Muscular</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="specificNeeds">🎯 Necesidades Específicas (opcional)</label>
+            <textarea
+              id="specificNeeds"
+              class="form-control"
+              rows="3"
+              placeholder="Ej: Lesión de rodilla, enfocarse en espalda, evitar ejercicios de impacto.">
+            </textarea>
+          </div>
+
+          <button type="submit" class="btn-primary" id="generateRoutineBtn">
+            <i class="fas fa-brain"></i> Generar Rutina con IA
+          </button>
+
+        </form>
+
+        <div class="loading" id="routineLoading" style="display:none;">
+          <div class="spinner"></div>
+
+          <div class="progress-steps">
+            <div class="progress-bar">
+              <div class="progress-fill" id="routineProgressFill"></div>
+            </div>
+
+            <div class="progress-step">
+              <div class="step-number active" id="step1">1</div>
+              <div class="step-label">Analizando</div>
+            </div>
+
+            <div class="progress-step">
+              <div class="step-number" id="step2">2</div>
+              <div class="step-label">Conectando</div>
+            </div>
+
+            <div class="progress-step">
+              <div class="step-number" id="step3">3</div>
+              <div class="step-label">Generando</div>
+            </div>
+
+            <div class="progress-step">
+              <div class="step-number" id="step4">4</div>
+              <div class="step-label">Completado</div>
+            </div>
+          </div>
+
+          <div class="status-message" id="routineStatus">
+            Iniciando generación de rutina.
+          </div>
+
+          <div class="time-indicator" id="routineTimeIndicator">
+            Tiempo estimado: 20-40 segundos
+          </div>
+
+          <div
+            class="generation-time"
+            id="routineGenerationTime"
+            style="display:none;">
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- JS -->
+  <script src="js/entrenamientos.js"></script>
+
+</body>
+</html>
